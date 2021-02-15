@@ -1,0 +1,61 @@
+from django.urls import include, path, re_path
+from django.views.generic import TemplateView
+from django.contrib.auth.forms import PasswordChangeForm 
+from apps.customers.forms import UserRegistrationForm
+from apps.customers import views
+import django_registration
+import bfmsite.regbackend
+from . import views
+from django_registration.backends.activation.views import RegistrationView
+
+
+# Uncomment the next two lines to enable the admin:
+from django.contrib import admin
+admin.autodiscover()
+
+urlpatterns = [
+    # Examples:
+     path(r'findyourteam/', views.findyourteam, {}),
+     path(r'bflogout/', views.bflogout, {}),
+     path(r'bflogin/', views.bflogin, {}),
+     path(r'bfsearch/', views.teamview, {}),
+    # register https always:
+    # path(r'accounts/', include('django_registration.backends.one_step.urls')),
+     path(r'accounts/register/', RegistrationView.as_view(form_class=UserRegistrationForm), name='django_registration_register',),
+    # path(r'accounts/', views.test, {}),
+     #path(r'accounts/', include('django.contrib.auth.urls')),
+    # path(r'register2/', django_registration.views.RegistrationView.register, {'form_class': UserRegistrationForm }, name='registration_register'),
+    path(r'register_customer/', views.register_one, name='registration_customer'),
+     re_path(r'register/teampage/(?P<team>\w+)/', views.teamview,{} ),
+     path(r'register/username_search/', views.bfname_usersearch, {}),
+    # path(r'^register/bfsubscribe/', customers.views.subscribe),
+    # path(r'^register/get_host_password/', customers.views.get_host_password),
+    # path(r'^register/registration_complete/$', customers.views.registration_complete,{'bfemail':'bfemail'},name='registration_complete'),
+    # path(r'^profile/$', views.users, {}),
+    # path(r'^editprofile/$', customers.views.editusers, {}),
+    # path(r'^editaccount/(?P<idno>\d+)/$', customers.views.editacct, ),
+    # path(r'^saveprofile/$', customers.views.saveusers, ),
+    # path(r'^savepassword/$', customers.views.save_emailpassword, ),
+    # path(r'^saveaccount/$', customers.views.save_account, ),
+    # path(r'^forgotpassword/$', views.forgotpassword, ),
+     path(r'features/', TemplateView.as_view(template_name="features.html")),
+     path(r'partners/', TemplateView.as_view(template_name="partners.html")),
+     path(r'support/', TemplateView.as_view(template_name="support/support.html")),
+     path(r'terms/', TemplateView.as_view(template_name="terms.html")),
+     path(r'privacy/', TemplateView.as_view(template_name="privacy.html")),
+    # path(r'^passwordchange/$', views.changepassword, {}),
+    # path(r'^passwordform/$', 'django.contrib.auth.views.password_change', {'template_name': 'registration/password_change_form.html', 'post_change_redirect': '/passwordchange/'}),
+     path(r'username_registration/', views.bfname_registration),#, {'template_name': 'search/username_registration.html'}),
+
+    #These are the team page paths
+    # path(r'^payments/', include('payments.urls')),
+    # path(r'^registration_complete/', customers.views.registration_complete, {}),
+    # path(r'^testregform/', test.regcom),
+    # path(r'^testhash/', test.testhash),
+
+     path(r'register_one/', views.register_one),
+     path(r'admin/doc/', include('django.contrib.admindocs.urls')),
+     path(r'admin/', admin.site.urls),
+     re_path(r'(?P<group>\w+)/', views.sports, ),
+     path(r'', views.homepage, ),
+]
